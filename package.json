@@ -1,0 +1,12 @@
+{
+  "name": "artas",
+  "version": "1.0.0",
+  "description": "Artas — a visual discovery landing page for artists and art lovers.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": ["art", "gallery", "pinterest", "artas"],
+  "license": "MIT"
+}
