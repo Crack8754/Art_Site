@@ -5,6 +5,7 @@ node_modules/
 .env
 .env.*
 !.env.example
+public/auth-config.js
 
 # Logs
 *.log

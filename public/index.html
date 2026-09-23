@@ -20,7 +20,7 @@
       </nav>
       <div class="header-actions">
         <button class="search-button" aria-label="Пошук" data-open-search><span></span></button>
-        <button class="login-button" type="button">Увійти</button>
+        <button class="login-button" type="button" data-auth-open>Увійти</button>
         <button class="upload-button" type="button" data-upload>Опублікувати <b>↗</b></button>
       </div>
     </header>
@@ -97,6 +97,64 @@
       <div class="modal-content"><button class="modal-close" type="button" aria-label="Закрити">×</button><p class="eyebrow"><i></i> Незабаром</p><h2 id="modal-title">Ваше мистецтво<br /><em>варте уваги.</em></h2><p>Функція публікації вже готується. Залишайтеся поруч із Artas.</p><button class="primary-button modal-done" type="button">Чудово <span>→</span></button></div>
     </div>
     <div class="search-panel" id="search-panel" aria-hidden="true"><button class="modal-close" type="button" aria-label="Закрити">×</button><label for="search-input">Пошук мистецтва</label><input id="search-input" type="search" placeholder="Наприклад, абстракція, портрет..." autocomplete="off" /><p>Натисніть Enter, щоб шукати</p></div>
+    <div class="auth-modal" id="auth-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+      <section class="auth-card">
+        <button class="modal-close" type="button" aria-label="Закрити" data-auth-close>×</button>
+        <p class="eyebrow"><i></i> Спільнота Artas</p>
+        <h2 id="auth-title">Раді вас <em>бачити.</em></h2>
+        <p class="auth-intro">Увійдіть, щоб зберігати роботи та відкривати більше мистецтва.</p>
+        <div class="auth-message" id="auth-message" role="status" aria-live="polite" hidden></div>
+        <div class="captcha-slot" id="captcha-slot" hidden></div>
+        <div class="auth-views">
+          <div class="auth-view" data-view="signin">
+            <button class="google-button" type="button" data-google-signin><span aria-hidden="true">G</span> Продовжити з Google</button>
+            <div class="auth-divider"><span>або з email</span></div>
+            <form data-auth-form="signin" novalidate>
+              <label>Email<input name="email" type="email" autocomplete="email" required maxlength="254" /></label>
+              <label>Пароль<input name="password" type="password" autocomplete="current-password" required minlength="12" /></label>
+              <button class="auth-link forgot-link" type="button" data-show-view="forgot">Забули пароль?</button>
+              <button class="primary-button auth-submit" type="submit">Увійти <span>→</span></button>
+            </form>
+            <p class="auth-switch">Ще не маєте акаунта? <button class="auth-link" type="button" data-show-view="signup">Створити акаунт</button></p>
+          </div>
+          <div class="auth-view" data-view="signup" hidden>
+            <button class="google-button" type="button" data-google-signin><span aria-hidden="true">G</span> Продовжити з Google</button>
+            <div class="auth-divider"><span>або з email</span></div>
+            <form data-auth-form="signup" novalidate>
+              <label>Ім’я<input name="displayName" type="text" autocomplete="name" required minlength="2" maxlength="40" /></label>
+              <label>Email<input name="email" type="email" autocomplete="email" required maxlength="254" /></label>
+              <label>Пароль<input name="password" type="password" autocomplete="new-password" required minlength="12" aria-describedby="password-hint" /></label>
+              <p class="field-hint" id="password-hint">Щонайменше 12 символів.</p>
+              <label>Повторіть пароль<input name="passwordConfirm" type="password" autocomplete="new-password" required minlength="12" /></label>
+              <button class="primary-button auth-submit" type="submit">Створити акаунт <span>→</span></button>
+            </form>
+            <p class="auth-switch">Вже маєте акаунт? <button class="auth-link" type="button" data-show-view="signin">Увійти</button></p>
+          </div>
+          <div class="auth-view" data-view="forgot" hidden>
+            <p class="auth-description">Введіть email, і ми надішлемо посилання для відновлення пароля, якщо акаунт існує.</p>
+            <form data-auth-form="forgot" novalidate>
+              <label>Email<input name="email" type="email" autocomplete="email" required maxlength="254" /></label>
+              <button class="primary-button auth-submit" type="submit">Надіслати посилання <span>→</span></button>
+            </form>
+            <p class="auth-switch"><button class="auth-link" type="button" data-show-view="signin">Повернутися до входу</button></p>
+          </div>
+          <div class="auth-view" data-view="update-password" hidden>
+            <p class="auth-description">Встановіть новий пароль для свого акаунта.</p>
+            <form data-auth-form="update-password" novalidate>
+              <label>Новий пароль<input name="password" type="password" autocomplete="new-password" required minlength="12" /></label>
+              <label>Повторіть пароль<input name="passwordConfirm" type="password" autocomplete="new-password" required minlength="12" /></label>
+              <button class="primary-button auth-submit" type="submit">Зберегти пароль <span>→</span></button>
+            </form>
+          </div>
+          <div class="auth-view" data-view="account" hidden>
+            <p class="auth-description">Ви увійшли як <strong data-account-email></strong>.</p>
+            <button class="primary-button auth-submit" type="button" data-signout>Вийти з акаунта <span>↗</span></button>
+          </div>
+        </div>
+      </section>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="auth-config.js"></script>
     <script src="script.js"></script>
   </body>
 </html>

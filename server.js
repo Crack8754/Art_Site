@@ -7,10 +7,19 @@ const publicDir = path.join(__dirname, 'public');
 const types = { '.css': 'text/css', '.js': 'application/javascript', '.html': 'text/html' };
 
 const server = http.createServer((req, res) => {
-  const urlPath = req.url === '/' ? '/index.html' : decodeURIComponent(req.url.split('?')[0]);
-  const filePath = path.normalize(path.join(publicDir, urlPath));
+  let urlPath;
+  try {
+    urlPath = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
+  } catch {
+    res.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
+    return res.end('Bad request');
+  }
 
-  if (!filePath.startsWith(publicDir)) {
+  const relativePath = urlPath.replace(/^[/\\]+/, '') || 'index.html';
+  const filePath = path.resolve(publicDir, relativePath);
+  const relativeFilePath = path.relative(publicDir, filePath);
+
+  if (relativeFilePath === '..' || relativeFilePath.startsWith(`..${path.sep}`) || path.isAbsolute(relativeFilePath)) {
     res.writeHead(403);
     return res.end('Forbidden');
   }
