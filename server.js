@@ -10,6 +10,7 @@ const server = http.createServer((req, res) => {
   let urlPath;
   try {
     urlPath = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
+    if (urlPath.includes('\0')) throw new Error('Invalid path');
   } catch {
     res.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
     return res.end('Bad request');

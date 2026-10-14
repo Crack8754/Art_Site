@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Опублікувати арт — Artas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="upload-page">
+  <header class="header">
+    <a class="brand" href="index.html"><span class="brand-mark">A</span><span>Artas</span></a>
+    <a class="text-link" href="profile.html">Мій профіль ↗</a>
+  </header>
+  <main class="upload-main">
+    <p class="eyebrow"><i></i> Поділіться своїм баченням</p>
+    <h1>Місце для <em>вашого арту.</em></h1>
+    <p class="upload-intro">Додайте роботу до Artas. Після публікації її побачать у стрічці та вашому профілі.</p>
+    <div id="upload-gate" class="upload-gate" role="status">Перевіряємо акаунт…</div>
+    <a href="index.html#signin" id="upload-signin" class="primary-button" hidden>Увійти або зареєструватися →</a>
+    <a href="profile.html" id="upload-profile" class="outline-button" hidden>Перейти до профілю</a>
+    <button type="button" id="upload-retry-gate" class="outline-button" hidden>Перевірити ще раз</button>
+    <form id="upload-form" hidden>
+      <fieldset id="upload-fields" class="upload-layout">
+        <legend class="visually-hidden">Публікація роботи</legend>
+        <div class="upload-visual">
+          <label for="art-file" class="file-label">Зображення роботи · від 1 до 5</label>
+          <div class="upload-preview" id="upload-preview"><span id="preview-placeholder">✦<small>Почніть із зображення</small></span><img id="art-preview" alt="Попередній перегляд вашої роботи" hidden /></div>
+          <div id="image-thumbnails" class="image-thumbnails" aria-label="Обрані зображення"></div>
+          <input id="art-file" name="file" type="file" accept="image/jpeg,image/png,image/webp" multiple aria-describedby="image-help" />
+          <p id="image-help" class="field-help">Оберіть до 5 фото одразу або додавайте по одному. Перше — обкладинка. JPEG, PNG або WebP · кожне до 10 МіБ і 40 Мп. Зображення перетворюються у WebP до 4096 px, без обрізання.</p>
+        </div>
+        <div class="upload-info">
+          <label for="art-title">Назва роботи</label><input id="art-title" name="title" required minlength="2" maxlength="120" placeholder="Дайте назву вашій роботі" />
+          <label for="art-category">Категорія</label><select id="art-category" name="category" required><option value="">Оберіть напрям</option></select>
+          <label for="art-description">Опис <span class="optional">необов’язково</span></label><textarea id="art-description" name="description" rows="7" maxlength="2000" placeholder="Ідея, техніка, історія створення…"></textarea>
+          <label class="checkbox-row"><input id="art-rights" type="checkbox" required /> Я маю право публікувати цю роботу.</label>
+          <p class="field-help">Робота та зображення будуть публічними. Не додавайте приватну інформацію.</p>
+        </div>
+      </fieldset>
+      <p id="upload-message" class="form-message" role="status" aria-live="polite" hidden></p>
+      <div class="upload-footer"><button id="publish-submit" class="primary-button" type="submit">Опублікувати роботу →</button><button id="discard-upload" class="outline-button" type="button" hidden>Скасувати завантаження</button><a href="profile.html" id="upload-success-link" class="text-link" hidden>Переглянути мій профіль →</a></div>
+    </form>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth-config.js"></script><script src="artworks.js"></script><script src="upload.js"></script>
+</body>
+</html>

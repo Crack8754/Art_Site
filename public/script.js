@@ -1,4 +1,3 @@
-const modal = document.querySelector('#modal');
 const searchPanel = document.querySelector('#search-panel');
 const searchInput = document.querySelector('#search-input');
 const authModal = document.querySelector('#auth-modal');
@@ -13,6 +12,7 @@ let passwordRecoveryActive = false;
 let captchaToken = null;
 let captchaWidgetId = null;
 let captchaReady = false;
+let authNameRevision = 0;
 
 if (window.artasAuthConfig?.supabaseUrl && window.artasAuthConfig?.supabaseAnonKey && window.supabase?.createClient) {
   supabaseClient = window.supabase.createClient(
@@ -25,13 +25,10 @@ if (window.artasAuthConfig?.supabaseUrl && window.artasAuthConfig?.supabaseAnonK
 }
 
 document.querySelectorAll('[data-upload]').forEach((button) => button.addEventListener('click', () => {
-  modal.classList.add('open');
-  modal.setAttribute('aria-hidden', 'false');
+  window.location.href = 'upload.html';
 }));
 
 document.querySelectorAll('.modal-close, .modal-done').forEach((button) => button.addEventListener('click', () => {
-  modal.classList.remove('open');
-  modal.setAttribute('aria-hidden', 'true');
   searchPanel.classList.remove('open');
   searchPanel.setAttribute('aria-hidden', 'true');
 }));
@@ -42,15 +39,18 @@ document.querySelector('[data-open-search]').addEventListener('click', () => {
   searchInput.focus();
 });
 
-document.querySelectorAll('.filter').forEach((button) => button.addEventListener('click', () => {
-  document.querySelector('.filter.active').classList.remove('active');
-  button.classList.add('active');
-}));
-
-document.querySelectorAll('.save-button').forEach((button) => button.addEventListener('click', () => {
-  button.classList.toggle('saved');
-  button.textContent = button.classList.contains('saved') ? '♥' : '♡';
-}));
+const homeGallery = ArtasArt.gallery({ client: supabaseClient, container: document.querySelector('#gallery'), status: document.querySelector('#gallery-status'), retry: document.querySelector('#gallery-retry'), more: document.querySelector('#gallery-more') });
+['', ...ArtasArt.CATEGORIES].forEach(category => {
+  const button = document.createElement('button'); button.type = 'button';
+  button.className = category ? 'filter' : 'filter active'; button.textContent = category || 'Усі роботи';
+  button.setAttribute('aria-pressed', String(!category));
+  button.addEventListener('click', () => {
+    document.querySelectorAll('#art-filters button').forEach(item => { item.classList.toggle('active', item === button); item.setAttribute('aria-pressed', String(item === button)); });
+    homeGallery.filter(category);
+  });
+  document.querySelector('#art-filters').append(button);
+});
+homeGallery.load();
 
 document.querySelector('[data-auth-open]').addEventListener('click', () => {
   if (!supabaseClient) {
@@ -58,7 +58,11 @@ document.querySelector('[data-auth-open]').addEventListener('click', () => {
     showAuthMessage('Авторизація ще не підключена. Додайте адресу та публічний ключ Supabase у public/auth-config.js.', 'error');
     return;
   }
-  openAuth(currentSession ? 'account' : 'signin');
+  if (currentSession) {
+    window.location.href = 'profile.html';
+    return;
+  }
+  openAuth('signin');
 });
 
 document.querySelectorAll('[data-auth-close]').forEach((button) => button.addEventListener('click', closeAuth));
@@ -98,6 +102,8 @@ async function initializeAuth() {
   currentSession = data?.session || null;
   updateAuthButton(currentSession?.user);
 
+  if (window.location.hash === '#signin' && !currentSession) openAuth('signin');
+
   const url = new URL(window.location.href);
   if (url.searchParams.has('error')) {
     openAuth('signin');
@@ -110,12 +116,20 @@ async function initializeAuth() {
 }
 
 function updateAuthButton(user) {
+  const revision = ++authNameRevision;
   if (!authButton) return;
   authButton.dataset.signedIn = user ? 'true' : 'false';
   authButton.textContent = user ? (user.user_metadata?.display_name || user.user_metadata?.full_name || user.user_metadata?.name || user.email || 'Мій акаунт') : 'Увійти';
   authButton.setAttribute('aria-label', user ? 'Відкрити мій акаунт' : 'Увійти');
   const email = document.querySelector('[data-account-email]');
   if (email) email.textContent = user?.email || '';
+  // Defer queries outside the auth callback; ignore responses from an older session.
+  if (user) setTimeout(async () => {
+    try {
+      const { data, error } = await supabaseClient.from('profiles').select('display_name').eq('id', user.id).maybeSingle();
+      if (!error && data && revision === authNameRevision) authButton.textContent = data.display_name;
+    } catch { /* Keep the existing fallback when the network is unavailable. */ }
+  }, 0);
 }
 
 function openAuth(view) {

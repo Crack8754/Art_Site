@@ -53,34 +53,14 @@
 
       <section class="discover" id="discover" aria-labelledby="discover-title">
         <div class="section-heading">
-          <div><p class="eyebrow"><i></i> Обране сьогодні</p><h2 id="discover-title">Знайдіть свою <em>іскру</em></h2></div>
-          <a class="text-link" href="#collections">Дивитися все <span>→</span></a>
+          <div><p class="eyebrow"><i></i> Нові роботи спільноти</p><h2 id="discover-title">Знайдіть свою <em>іскру</em></h2></div>
+          <a class="text-link" href="upload.html">Додати роботу <span>→</span></a>
         </div>
-        <div class="filter-row" aria-label="Категорії мистецтва">
-          <button class="filter active" type="button">Для вас</button><button class="filter" type="button">Живопис</button><button class="filter" type="button">Цифрове</button><button class="filter" type="button">Фотографія</button><button class="filter" type="button">Скульптура</button><button class="filter" type="button">Колаж</button>
-        </div>
-        <div class="gallery-grid" id="gallery">
-          <article class="art-card tall">
-            <img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&w=800&q=85" alt="Картина в теплих тонах" />
-            <button class="save-button" type="button" aria-label="Зберегти роботу">♡</button>
-            <div class="card-meta"><div><h3>Тиха година</h3><p>Марія Коваль</p></div><span>2024</span></div>
-          </article>
-          <article class="art-card short">
-            <img src="https://images.unsplash.com/photo-1577083288073-40892c0860a4?auto=format&fit=crop&w=800&q=85" alt="Скульптура в інтер'єрі" />
-            <button class="save-button" type="button" aria-label="Зберегти роботу">♡</button>
-            <div class="card-meta"><div><h3>Спокій</h3><p>O. Fedorov</p></div><span>2023</span></div>
-          </article>
-          <article class="art-card medium featured">
-            <img src="https://images.unsplash.com/photo-1561214115-f2f134cc4912?auto=format&fit=crop&w=800&q=85" alt="Синя абстрактна картина" />
-            <button class="save-button" type="button" aria-label="Зберегти роботу">♡</button>
-            <div class="card-meta"><div><h3>Синій шум</h3><p>Amy Calder</p></div><span>2024</span></div>
-          </article>
-          <article class="art-card medium">
-            <img src="https://images.unsplash.com/photo-1578301978018-3005759f48f7?auto=format&fit=crop&w=800&q=85" alt="Кольоровий абстрактний живопис" />
-            <button class="save-button" type="button" aria-label="Зберегти роботу">♡</button>
-            <div class="card-meta"><div><h3>Кольори зими</h3><p>Nina Rhodes</p></div><span>2024</span></div>
-          </article>
-        </div>
+        <div class="filter-row" id="art-filters" aria-label="Категорії мистецтва"></div>
+        <p id="gallery-status" class="gallery-status" role="status">Завантажуємо роботи…</p>
+        <button id="gallery-retry" class="outline-button" type="button" hidden>Повторити</button>
+        <div class="published-grid" id="gallery"></div>
+        <button id="gallery-more" class="outline-button" type="button" hidden>Показати ще</button>
       </section>
 
       <section class="callout" id="creators">
@@ -93,9 +73,6 @@
 
     <footer><a class="brand" href="#top"><span class="brand-mark">A</span><span>Artas</span></a><p>© 2024 Artas. Мистецтво належить усім.</p><div><a href="#top">Instagram</a><a href="#top">Behance</a></div></footer>
 
-    <div class="modal" id="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-      <div class="modal-content"><button class="modal-close" type="button" aria-label="Закрити">×</button><p class="eyebrow"><i></i> Незабаром</p><h2 id="modal-title">Ваше мистецтво<br /><em>варте уваги.</em></h2><p>Функція публікації вже готується. Залишайтеся поруч із Artas.</p><button class="primary-button modal-done" type="button">Чудово <span>→</span></button></div>
-    </div>
     <div class="search-panel" id="search-panel" aria-hidden="true"><button class="modal-close" type="button" aria-label="Закрити">×</button><label for="search-input">Пошук мистецтва</label><input id="search-input" type="search" placeholder="Наприклад, абстракція, портрет..." autocomplete="off" /><p>Натисніть Enter, щоб шукати</p></div>
     <div class="auth-modal" id="auth-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="auth-title">
       <section class="auth-card">
@@ -111,7 +88,7 @@
             <div class="auth-divider"><span>або з email</span></div>
             <form data-auth-form="signin" novalidate>
               <label>Email<input name="email" type="email" autocomplete="email" required maxlength="254" /></label>
-              <label>Пароль<input name="password" type="password" autocomplete="current-password" required minlength="12" /></label>
+              <label>Пароль<input name="password" type="password" autocomplete="current-password" required /></label>
               <button class="auth-link forgot-link" type="button" data-show-view="forgot">Забули пароль?</button>
               <button class="primary-button auth-submit" type="submit">Увійти <span>→</span></button>
             </form>
@@ -155,6 +132,7 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="auth-config.js"></script>
+    <script src="artworks.js"></script>
     <script src="script.js"></script>
   </body>
 </html>

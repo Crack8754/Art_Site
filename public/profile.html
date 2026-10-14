@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Профіль митця на Artas." />
+    <title>Профіль — Artas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="profile-page">
+    <header class="header">
+      <a class="brand" href="index.html" aria-label="Artas — на головну"><span class="brand-mark">A</span><span>Artas</span></a>
+      <nav class="main-nav" aria-label="Головна навігація"><a href="index.html#discover">Відкривати</a><a href="index.html#collections">Колекції</a><a href="index.html#creators">Митці</a></nav>
+      <div class="header-actions"><a class="text-button" href="index.html">На головну</a><button class="upload-button" type="button" data-profile-publish>Опублікувати <b>↗</b></button></div>
+    </header>
+
+    <main>
+      <div class="profile-notice" id="profile-notice" role="status" aria-live="polite" hidden></div>
+      <section class="profile-hero" aria-labelledby="profile-name">
+        <div class="profile-cover"></div>
+        <div class="profile-content">
+          <div class="avatar" id="profile-avatar" aria-hidden="true">A</div>
+          <div class="profile-head">
+            <div><p class="eyebrow"><i></i> Профіль Artas</p><h1 id="profile-name">Завантаження...</h1><p class="profile-handle" id="profile-handle">@artas</p></div>
+            <div class="profile-actions" id="profile-actions" hidden><button class="outline-button" type="button" id="edit-profile">Редагувати профіль</button><button class="icon-button" type="button" id="settings-button" aria-label="Налаштування акаунта">⚙</button></div><button class="primary-button follow-button" type="button" id="follow-button" hidden>Підписатися <span>+</span></button>
+          </div>
+          <p class="profile-bio" id="profile-bio"></p>
+          <div class="profile-details"><span id="profile-location" hidden>⌖ <b></b></span><a id="profile-website" target="_blank" rel="noopener" hidden>↗ Сайт</a><a id="profile-instagram" target="_blank" rel="noopener" hidden>◎ Instagram</a><a id="profile-behance" target="_blank" rel="noopener" hidden>◒ Behance</a></div>
+          <div class="style-tags" id="style-tags"></div>
+          <div class="profile-stats"><div><strong id="artwork-count">0</strong><span>робіт</span></div><div><strong id="follower-count">—</strong><span>підписників</span></div><div><strong id="following-count">—</strong><span>підписок</span></div></div>
+          <p id="follow-error" role="status" hidden>Не вдалося завантажити підписки. <button type="button" id="retry-follows">Повторити</button></p>
+        </div>
+      </section>
+      <section class="profile-gallery-section">
+        <div class="profile-tabs" role="tablist"><button class="profile-tab active" type="button" data-tab="works" role="tab" aria-selected="true">Роботи</button><button class="profile-tab" type="button" data-tab="saved" role="tab" aria-selected="false" id="saved-tab" hidden>Збережене</button></div>
+        <div id="profile-works">
+          <p id="works-copy" class="gallery-status" role="status">Завантажуємо роботи…</p>
+          <button id="works-retry" class="outline-button" type="button" hidden>Повторити</button>
+          <div id="profile-artworks" class="published-grid"></div>
+          <button id="works-more" class="outline-button" type="button" hidden>Показати ще</button>
+        </div>
+        <div class="empty-profile-state" id="saved-state" hidden><span>✦</span><h2>Збережене</h2><p>Колекції ще розробляються.</p></div>
+      </section>
+    </main>
+
+    <div class="profile-modal" id="edit-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="edit-title">
+      <section class="profile-modal-card"><button class="modal-close" type="button" data-close-modal aria-label="Закрити">×</button><p class="eyebrow"><i></i> Ваш простір</p><h2 id="edit-title">Редагувати <em>профіль.</em></h2><form id="profile-form" novalidate>
+        <label>Аватар URL <input name="avatarUrl" type="url" maxlength="2048" placeholder="https://..." /><small>Посилання на зображення; завантаження файлу додамо разом зі сховищем артів.</small></label>
+        <div class="form-row"><label>Ім’я <input name="displayName" type="text" required minlength="2" maxlength="40" /></label><label>Username <span class="input-prefix">@<input name="username" type="text" required minlength="3" maxlength="30" pattern="[a-z0-9_]+" autocomplete="username" /></span><small>Латиниця, цифри та _</small></label></div>
+        <label>Про себе <textarea name="bio" maxlength="300" rows="4" placeholder="Розкажіть кілька слів про свою творчість."></textarea><small><span id="bio-count">0</span>/300</small></label>
+        <label>Місто або країна <input name="location" type="text" maxlength="80" /></label>
+        <fieldset class="category-fieldset"><legend>Напрями</legend><p class="field-help">Оберіть один або кілька напрямів своєї творчості.</p><div id="profile-categories" class="category-choices"></div><small id="legacy-styles-notice" hidden>Попередні довільні напрями будуть замінені вибраними категоріями після збереження.</small></fieldset>
+        <label>Особистий сайт <input name="websiteUrl" type="url" maxlength="2048" placeholder="https://example.com" /></label>
+        <div class="form-row"><label>Instagram <input name="instagramUrl" type="url" maxlength="2048" placeholder="https://instagram.com/..." /></label><label>Behance <input name="behanceUrl" type="url" maxlength="2048" placeholder="https://behance.net/..." /></label></div>
+        <label class="checkbox-row"><input name="isArtist" type="checkbox" /> Я хочу публікувати власні роботи</label>
+        <p class="form-message" id="profile-form-message" role="status" aria-live="polite" hidden></p><button class="primary-button form-submit" type="submit">Зберегти зміни <span>→</span></button>
+      </form></section>
+    </div>
+    <div class="profile-modal" id="settings-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+      <section class="profile-modal-card settings-card">
+        <button class="modal-close" type="button" data-close-modal aria-label="Закрити">×</button>
+        <p class="eyebrow"><i></i> Приватне</p><h2 id="settings-title">Налаштування <em>акаунта.</em></h2>
+        <p>Ви увійшли як <strong id="account-email"></strong>.</p>
+        <button class="outline-button" type="button" id="change-password-button" aria-expanded="false" aria-controls="password-form">Змінити пароль</button>
+        <form id="password-form" hidden>
+          <label>Поточний пароль<input name="currentPassword" type="password" autocomplete="current-password" /><small>Залиште порожнім, якщо входите лише через Google.</small></label>
+          <label>Новий пароль<input name="newPassword" type="password" autocomplete="new-password" required minlength="12" aria-describedby="profile-password-hint" /></label>
+          <small id="profile-password-hint">Щонайменше 12 символів.</small>
+          <label>Повторіть новий пароль<input name="confirmPassword" type="password" autocomplete="new-password" required minlength="12" /></label>
+          <p class="form-message" id="password-message" role="status" aria-live="polite" hidden></p>
+          <button class="primary-button form-submit" type="submit">Зберегти пароль</button>
+        </form>
+        <button class="danger-button" type="button" id="signout-button">Вийти з акаунта</button>
+      </section>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="auth-config.js"></script><script src="artworks.js"></script><script src="profile.js"></script>
+  </body>
+</html>
